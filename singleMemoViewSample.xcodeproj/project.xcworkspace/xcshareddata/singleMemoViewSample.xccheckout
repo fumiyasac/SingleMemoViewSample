@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>C0D07B46-A44B-4B95-B912-93F013991CB3</string>
+	<key>IDESourceControlProjectName</key>
+	<string>singleMemoViewSample</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>386B0F3D5C628AA7240533F19DFB0971C6D5FAC5</key>
+		<string>github.com:fumiyasac/SingleMemoViewSample.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>singleMemoViewSample.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>386B0F3D5C628AA7240533F19DFB0971C6D5FAC5</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:fumiyasac/SingleMemoViewSample.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>386B0F3D5C628AA7240533F19DFB0971C6D5FAC5</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>386B0F3D5C628AA7240533F19DFB0971C6D5FAC5</string>
+			<key>IDESourceControlWCCName</key>
+			<string>singleMemoViewSample</string>
+		</dict>
+	</array>
+</dict>
+</plist>

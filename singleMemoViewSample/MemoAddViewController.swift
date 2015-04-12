@@ -37,7 +37,7 @@ class MemoAddViewController: UIViewController {
         println("\(dataArray)")
         
         //senderから受け取った値を表示する
-        if(self.dataArray[0] as NSString == ""){
+        if(self.dataArray[0] as! NSString == ""){
             
             //ボタンのふるまい
             self.addButton.enabled    = true;
@@ -62,9 +62,9 @@ class MemoAddViewController: UIViewController {
             self.deleteButton.alpha = 1.0;
             
             //渡された値をセットする
-            self.memo_id             = self.dataArray[0] as String
-            self.titleFormArea.text  = self.dataArray[1] as String
-            self.detailTextArea.text = self.dataArray[2] as String
+            self.memo_id             = self.dataArray[0] as! String
+            self.titleFormArea.text  = self.dataArray[1] as! String
+            self.detailTextArea.text = self.dataArray[2] as! String
         }
     }
 
@@ -125,7 +125,7 @@ class MemoAddViewController: UIViewController {
         var error: NSError?
         
         //NSManagedObjectContext取得
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedObjectContext: NSManagedObjectContext = appDelegate.managedObjectContext!
         
         //フェッチリクエストと条件の設定
@@ -137,10 +137,15 @@ class MemoAddViewController: UIViewController {
         let fetchResult: NSArray = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)!
         
         //削除対象のエンティティ
-        let deleteMemoEntity = fetchResult.objectAtIndex(0) as NSManagedObject
+        let deleteMemoEntity = fetchResult.objectAtIndex(0) as! NSManagedObject
+        
+        println("フェッチ結果：\(fetchResult)")
+        println("削除対象：\(deleteMemoEntity)")
+        
         
         //NSManagedObjectContextから削除する
         managedObjectContext.deleteObject(deleteMemoEntity)
+        managedObjectContext.save(nil)
         
         if !managedObjectContext.save(&error) {
             abort()
@@ -155,7 +160,7 @@ class MemoAddViewController: UIViewController {
         var error: NSError?
         
         //NSManagedObjectContext取得
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedObjectContext: NSManagedObjectContext = appDelegate.managedObjectContext!
         
         //フェッチリクエストと条件の設定
@@ -167,7 +172,7 @@ class MemoAddViewController: UIViewController {
         let fetchResult: NSArray = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)!
         
         //更新対象のエンティティ
-        let editMemoEntity = fetchResult.objectAtIndex(0) as NSManagedObject
+        let editMemoEntity = fetchResult.objectAtIndex(0) as! NSManagedObject
         
         editMemoEntity.setValue(self.titleFormArea.text,   forKey:"title")
         editMemoEntity.setValue(self.detailTextArea.text,  forKey:"detail")
@@ -181,11 +186,11 @@ class MemoAddViewController: UIViewController {
     func addMemoToCoreData() {
         
         //NSManagedObjectContext取得
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedObjectContext: NSManagedObjectContext = appDelegate.managedObjectContext!
         
         //新規追加
-        let newMemoEntity = NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: managedObjectContext) as NSManagedObject
+        let newMemoEntity = NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: managedObjectContext) as! NSManagedObject
         
         newMemoEntity.setValue(Int(self.getNextMemoId()), forKey:"memo_id")
         newMemoEntity.setValue(self.titleFormArea.text,   forKey:"title")
@@ -204,7 +209,7 @@ class MemoAddViewController: UIViewController {
         var error: NSError?
         
         //NSManagedObjectContext取得
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedObjectContext: NSManagedObjectContext = appDelegate.managedObjectContext!
         
         //フェッチリクエストと条件の設定
@@ -225,7 +230,7 @@ class MemoAddViewController: UIViewController {
         //フェッチ結果をreturn
         if let results = managedObjectContext.executeFetchRequest(fetchRequest, error: nil) {
             if results.count > 0 {
-                let maxId = results[0]["maxId"] as Int
+                let maxId = results[0]["maxId"] as! Int
                 return maxId + 1;
             }
         }

@@ -31,19 +31,19 @@ class MemoListViewController: UIViewController, UITableViewDelegate, UITableView
     
     //画面表示前に実行される
     override func viewWillAppear(animated: Bool) {
-        
-        //テーブルビューをリロードする
-        self.memoTableView.reloadData()
+
+        //カウントの初期値を設定
+        fetchCount = 0
         
         //CoreDataからメモ一覧を呼び出す
         self.selectRecordAndCountToCoreData()
+        
+        //テーブルビューをリロードする
+        self.memoTableView.reloadData()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //カウントの初期値を設定
-        fetchCount = 0
         
         //tableViewデリゲート
         self.memoTableView.delegate = self
@@ -69,7 +69,7 @@ class MemoListViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         //Xibファイルを元にデータを作成する
-        var cell = tableView.dequeueReusableCellWithIdentifier("MemoCell") as MemoTableViewCell;
+        var cell = tableView.dequeueReusableCellWithIdentifier("MemoCell") as! MemoTableViewCell;
         var item: AnyObject? = fetchDataArray?.objectAtIndex(indexPath.row)
         
         //CoreDataからテーブルセルに値をセットする処理を記述
@@ -107,8 +107,8 @@ class MemoListViewController: UIViewController, UITableViewDelegate, UITableView
         
         //新規追加ボタンを押す(追加) or テーブルビュータップ(編集)
         if segue.identifier == "toEdit"{
-            var memoAddViewController = segue.destinationViewController as MemoAddViewController
-            memoAddViewController.dataArray = sender as NSArray
+            var memoAddViewController = segue.destinationViewController as! MemoAddViewController
+            memoAddViewController.dataArray = sender as! NSArray
         }
         
     }
@@ -130,7 +130,7 @@ class MemoListViewController: UIViewController, UITableViewDelegate, UITableView
         var error: NSError?
 
         //NSManagedObjectContext取得
-        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedObjectContext: NSManagedObjectContext = appDelegate.managedObjectContext!
 
         //フェッチリクエストと条件の設定
