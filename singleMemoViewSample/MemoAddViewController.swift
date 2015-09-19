@@ -34,7 +34,7 @@ class MemoAddViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        println("\(dataArray)")
+        print("\(dataArray)")
         
         //senderから受け取った値を表示する
         if(self.dataArray[0] as! NSString == ""){
@@ -112,7 +112,7 @@ class MemoAddViewController: UIViewController {
         var validationFlag: Bool! = true;
         
         //データバリデーションに引っかかった際はエラーメッセージを表示
-        if(!Validation.checkExistString(self.titleFormArea.text) || !Validation.checkExistString(self.detailTextArea.text)){
+        if(!Validation.checkExistString(self.titleFormArea.text!) || !Validation.checkExistString(self.detailTextArea.text)){
             validationFlag = false;
         }
         return validationFlag;
@@ -134,20 +134,26 @@ class MemoAddViewController: UIViewController {
         fetchRequest.predicate = NSPredicate(format:"memo_id = \(self.memo_id)")
         
         //フェッチ結果
-        let fetchResult: NSArray = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)!
+        let fetchResult: NSArray = try! managedObjectContext.executeFetchRequest(fetchRequest)
         
         //削除対象のエンティティ
         let deleteMemoEntity = fetchResult.objectAtIndex(0) as! NSManagedObject
         
-        println("フェッチ結果：\(fetchResult)")
-        println("削除対象：\(deleteMemoEntity)")
+        print("フェッチ結果：\(fetchResult)")
+        print("削除対象：\(deleteMemoEntity)")
         
         
         //NSManagedObjectContextから削除する
         managedObjectContext.deleteObject(deleteMemoEntity)
-        managedObjectContext.save(nil)
+        do {
+            try managedObjectContext.save()
+        } catch _ {
+        }
         
-        if !managedObjectContext.save(&error) {
+        do {
+            try managedObjectContext.save()
+        } catch let error1 as NSError {
+            error = error1
             abort()
         }
         
@@ -169,7 +175,7 @@ class MemoAddViewController: UIViewController {
         fetchRequest.predicate = NSPredicate(format:"memo_id = \(self.memo_id)")
         
         //フェッチ結果
-        let fetchResult: NSArray = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)!
+        let fetchResult: NSArray = try! managedObjectContext.executeFetchRequest(fetchRequest)
         
         //更新対象のエンティティ
         let editMemoEntity = fetchResult.objectAtIndex(0) as! NSManagedObject
@@ -177,7 +183,10 @@ class MemoAddViewController: UIViewController {
         editMemoEntity.setValue(self.titleFormArea.text,   forKey:"title")
         editMemoEntity.setValue(self.detailTextArea.text,  forKey:"detail")
         
-        if !managedObjectContext.save(&error) {
+        do {
+            try managedObjectContext.save()
+        } catch let error1 as NSError {
+            error = error1
             abort()
         }
     }
@@ -190,14 +199,17 @@ class MemoAddViewController: UIViewController {
         let managedObjectContext: NSManagedObjectContext = appDelegate.managedObjectContext!
         
         //新規追加
-        let newMemoEntity = NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: managedObjectContext) as! NSManagedObject
+        let newMemoEntity = NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: managedObjectContext) 
         
         newMemoEntity.setValue(Int(self.getNextMemoId()), forKey:"memo_id")
         newMemoEntity.setValue(self.titleFormArea.text,   forKey:"title")
         newMemoEntity.setValue(self.detailTextArea.text,  forKey:"detail")
         
         var error: NSError? = nil
-        if !managedObjectContext.save(&error) {
+        do {
+            try managedObjectContext.save()
+        } catch let error1 as NSError {
+            error = error1
             abort()
         }
     }
@@ -228,7 +240,7 @@ class MemoAddViewController: UIViewController {
         fetchRequest.resultType = .DictionaryResultType
         
         //フェッチ結果をreturn
-        if let results = managedObjectContext.executeFetchRequest(fetchRequest, error: nil) {
+        if let results = try? managedObjectContext.executeFetchRequest(fetchRequest) {
             if results.count > 0 {
                 let maxId = results[0]["maxId"] as! Int
                 return maxId + 1;

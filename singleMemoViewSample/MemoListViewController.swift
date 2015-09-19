@@ -50,7 +50,7 @@ class MemoListViewController: UIViewController, UITableViewDelegate, UITableView
         self.memoTableView.dataSource = self
         
         //Xibのクラスを読み込む宣言を行う
-        var nib:UINib = UINib(nibName: "MemoTableViewCell", bundle: nil)
+        let nib:UINib = UINib(nibName: "MemoTableViewCell", bundle: nil)
         self.memoTableView.registerNib(nib, forCellReuseIdentifier: "MemoCell")
         
     }
@@ -69,8 +69,8 @@ class MemoListViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         //Xibファイルを元にデータを作成する
-        var cell = tableView.dequeueReusableCellWithIdentifier("MemoCell") as! MemoTableViewCell;
-        var item: AnyObject? = fetchDataArray?.objectAtIndex(indexPath.row)
+        let cell = tableView.dequeueReusableCellWithIdentifier("MemoCell") as! MemoTableViewCell;
+        let item: AnyObject? = fetchDataArray?.objectAtIndex(indexPath.row)
         
         //CoreDataからテーブルセルに値をセットする処理を記述
         cell.titleText?.text  = item?.valueForKey("title") as? String
@@ -83,17 +83,17 @@ class MemoListViewController: UIViewController, UITableViewDelegate, UITableView
     //セルをタップした時に呼び出される ※必須
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        var item: AnyObject? = fetchDataArray?.objectAtIndex(indexPath.row)
+        let item: AnyObject? = fetchDataArray?.objectAtIndex(indexPath.row)
         var itemArray = [String]()
         
-        var memoIdValue : AnyObject? = item?.valueForKey("memo_id")
-        var titleValue  : String? = item?.valueForKey("title") as? String
-        var detailValue : String? = item?.valueForKey("detail") as? String
+        let memoIdValue : AnyObject? = item?.valueForKey("memo_id")
+        let titleValue  : String? = item?.valueForKey("title") as? String
+        let detailValue : String? = item?.valueForKey("detail") as? String
         
         //IDはOptional型でとってくるので強引に型変換をかける
-        var memo_id : String = "\(memoIdValue!)"
-        var title   : String = titleValue!
-        var detail  : String = detailValue!
+        let memo_id : String = "\(memoIdValue!)"
+        let title   : String = titleValue!
+        let detail  : String = detailValue!
         
         itemArray.append(memo_id)
         itemArray.append(title)
@@ -107,7 +107,7 @@ class MemoListViewController: UIViewController, UITableViewDelegate, UITableView
         
         //新規追加ボタンを押す(追加) or テーブルビュータップ(編集)
         if segue.identifier == "toEdit"{
-            var memoAddViewController = segue.destinationViewController as! MemoAddViewController
+            let memoAddViewController = segue.destinationViewController as! MemoAddViewController
             memoAddViewController.dataArray = sender as! NSArray
         }
         
@@ -139,7 +139,13 @@ class MemoListViewController: UIViewController, UITableViewDelegate, UITableView
         fetchRequest.predicate = NSPredicate(format:"memo_id > 0")
 
         //フェッチ結果
-        let fetchResults = managedObjectContext.executeFetchRequest(fetchRequest, error: &error)
+        let fetchResults: [AnyObject]?
+        do {
+            fetchResults = try managedObjectContext.executeFetchRequest(fetchRequest)
+        } catch let error1 as NSError {
+            error = error1
+            fetchResults = nil
+        }
                 
         //データの取得処理成功時
         if let results: AnyObject = fetchResults {
@@ -152,7 +158,7 @@ class MemoListViewController: UIViewController, UITableViewDelegate, UITableView
             
         //失敗時
         } else {
-            println("Could not fetch \(error) , \(error!.userInfo)")
+            print("Could not fetch \(error) , \(error!.userInfo)")
         }
     }
     
@@ -162,7 +168,7 @@ class MemoListViewController: UIViewController, UITableViewDelegate, UITableView
 
     @IBAction func dataAddBtn(sender: UIButton) {
         //空っぽの配列を準備
-        var item :NSArray = ["","",""]
+        let item :NSArray = ["","",""]
         self.performSegueWithIdentifier("toEdit", sender: item)
     }
 
